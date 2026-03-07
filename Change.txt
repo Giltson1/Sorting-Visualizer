@@ -1,0 +1,13 @@
+date 3/06/26: 
+ am try to set  up everything that I need and this the Idea that I have so far for this project 
+visualize:
+-QuickSort
+-MergeSort
+-BFS / DFS
+show step-by-step execution
+user can change array size
+speed controls
+Tech: 
+-React
+-D3.js or Canvas
+-JavaScript
