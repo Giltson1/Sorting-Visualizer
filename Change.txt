@@ -11,3 +11,10 @@ Tech:
 -React
 -D3.js or Canvas
 -JavaScript
+
+date 03/08/26:
+am working on layerout of website first and how it going to look
+moving all the file where this need to be.
+work on nav bar is setup 
+
+what left add the algoriths and visualize for them 
