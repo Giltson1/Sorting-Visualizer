@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function SelectionSort() {
   const [array, setArray] = useState([]);
@@ -11,7 +11,7 @@ export default function SelectionSort() {
   const MAX_VALUE = 300;
   const ANIMATION_SPEED = 50;
 
-  useState(() => {
+  useEffect(() => {
     generateNewArray();
   }, []);
 

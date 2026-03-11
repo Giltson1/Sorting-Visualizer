@@ -41,8 +41,8 @@
   align-items: flex-end;
   justify-content: center;
   gap: 8px;
-  height: 600px;
-  padding: 300px;
+  height: 400px;
+  padding: 20px;
   border-radius: 12px;
   background: #111827;
   overflow-x: auto;

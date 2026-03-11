@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function BubbleSort() {
   const [array, setArray] = useState([]);
@@ -11,7 +11,7 @@ export default function BubbleSort() {
   const MAX_VALUE = 300;
   const ANIMATION_SPEED = 50;
 
-  useState(() => {
+  useEffect(() => {
     generateNewArray();
   }, []);
 
@@ -103,7 +103,6 @@ export default function BubbleSort() {
 
   return (
     <div className="sort-page">
-      <h2 className="sort-title">BubbleSort Visualizer</h2>
 
       <div className="sort-controls">
         <button onClick={handleReset} disabled={isSorting}>

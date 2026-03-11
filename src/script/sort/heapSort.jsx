@@ -9,7 +9,7 @@ function HeapSort() {
 
   const NUMBER_OF_BARS = 25;
   const MIN_VALUE = 20;
-  const MAX_VALUE =500;
+  const MAX_VALUE =400;
   const ANIMATION_SPEED = 120;
 
   useEffect(() => {
@@ -74,6 +74,8 @@ function HeapSort() {
 
   return (
     <div className="sort-page">
+      <h2 className="sort-title">HeapSort Visualizer</h2>
+
       <div className="sort-controls">
         <button onClick={generateNewArray} disabled={isSorting}>
           Generate New Array
