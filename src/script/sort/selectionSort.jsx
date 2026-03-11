@@ -109,7 +109,6 @@ export default function SelectionSort() {
 
   return (
     <div className="sort-page">
-      <h2 className="sort-title">SelectionSort Visualizer</h2>
 
       <div className="sort-controls">
         <button onClick={handleReset} disabled={isSorting}>
