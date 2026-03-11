@@ -74,8 +74,6 @@ function HeapSort() {
 
   return (
     <div className="sort-page">
-      <h2 className="sort-title">HeapSort Visualizer</h2>
-
       <div className="sort-controls">
         <button onClick={generateNewArray} disabled={isSorting}>
           Generate New Array
