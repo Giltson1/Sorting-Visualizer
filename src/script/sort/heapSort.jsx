@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { heapsort } from "./heapSort.js";
 
 function HeapSort() {
@@ -6,15 +6,22 @@ function HeapSort() {
   const [activeBars, setActiveBars] = useState([]);
   const [sortedBars, setSortedBars] = useState([]);
   const [isSorting, setIsSorting] = useState(false);
+  const [speed, setSpeed] = useState(50);
+  const speedRef = useRef(speed);
 
   const NUMBER_OF_BARS = 25;
   const MIN_VALUE = 20;
   const MAX_VALUE =400;
-  const ANIMATION_SPEED = 120;
+  const MIN_SPEED = 10;
+  const MAX_SPEED = 300;
 
   useEffect(() => {
     generateNewArray();
   }, []);
+
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
 
   function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -66,9 +73,9 @@ function HeapSort() {
           setTimeout(() => {
             setActiveBars([]);
             setIsSorting(false);
-          }, ANIMATION_SPEED);
+          }, speedRef.current);
         }
-      }, step * ANIMATION_SPEED);
+      }, step * speedRef.current);
     });
   }
 
@@ -82,6 +89,18 @@ function HeapSort() {
         <button onClick={startHeapSort} disabled={isSorting}>
           Start Heap Sort
         </button>
+        <div className="speed-control">
+          <label htmlFor="speedRange">Speed</label>
+          <input
+            id="speedRange"
+            type="range"
+            min={MIN_SPEED}
+            max={MAX_SPEED}
+            value={speed}
+            onChange={(e) => setSpeed(Number(e.target.value))}
+          />
+          
+        </div>
       </div>
 
       <div className="array-container">
@@ -100,7 +119,7 @@ function HeapSort() {
                 className={barClass}
                 style={{ height: `${value}px` }}
               ></div>
-              <span className="bar-label">{value}</span>
+              <span className="bar-label"></span>
             </div>
           );
         })}

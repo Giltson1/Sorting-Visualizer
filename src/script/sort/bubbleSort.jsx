@@ -1,22 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function BubbleSort() {
   const [array, setArray] = useState([]);
   const [activeBars, setActiveBars] = useState([]);
   const [sortedBars, setSortedBars] = useState([]);
   const [isSorting, setIsSorting] = useState(false);
+  const [speed, setSpeed] = useState(50);
+
+  const speedRef = useRef(speed);
 
   const NUMBER_OF_BARS = 25;
   const MIN_VALUE = 20;
   const MAX_VALUE = 300;
-  const ANIMATION_SPEED = 50;
+
+  const MIN_SPEED = 10;
+  const MAX_SPEED = 300;
 
   useEffect(() => {
     generateNewArray();
   }, []);
 
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
+
   function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   function generateNewArray() {
@@ -43,7 +56,6 @@ export default function BubbleSort() {
 
         if (a[j] > a[j + 1]) {
           [a[j], a[j + 1]] = [a[j + 1], a[j]];
-
           animations.push({
             type: "swap",
             indices: [j, j + 1],
@@ -51,50 +63,50 @@ export default function BubbleSort() {
           });
         }
       }
-      
-      // Mark the last element of this pass as sorted
+
       animations.push({ type: "sorted", index: n - 1 - i });
     }
-    
-    // Mark the first element as sorted (it's the smallest after all passes)
+
     animations.push({ type: "sorted", index: 0 });
 
     return animations;
   }
 
-  const handleSort = () => {
+  const handleSort = async () => {
     if (isSorting) return;
+
     setIsSorting(true);
     setSortedBars([]);
+    setActiveBars([]);
+
     const animations = bubbleSortAnimations(array);
-    
+
     for (let i = 0; i < animations.length; i++) {
-      setTimeout(() => {
-        const anim = animations[i];
-        
-        if (anim.type === "compare") {
-          setActiveBars(anim.indices || []);
-        }
-        
-        if (anim.type === "swap") {
-          setArray([...anim.array]);
-          setActiveBars(anim.indices || []);
-        }
-        
-        if (anim.type === "sorted") {
-          setSortedBars(prev => {
-            if (prev.includes(anim.index)) return prev;
-            return [...prev, anim.index];
-          });
-          setActiveBars(prev => prev.filter(idx => idx !== anim.index));
-        }
-        
-        if (i === animations.length - 1) {
-          setIsSorting(false);
-          setActiveBars([]);
-        }
-      }, i * ANIMATION_SPEED);
+      const anim = animations[i];
+
+      if (anim.type === "compare") {
+        setActiveBars(anim.indices || []);
+      }
+
+      if (anim.type === "swap") {
+        setArray([...anim.array]);
+        setActiveBars(anim.indices || []);
+      }
+
+      if (anim.type === "sorted") {
+        setSortedBars((prev) => {
+          if (prev.includes(anim.index)) return prev;
+          return [...prev, anim.index];
+        });
+
+        setActiveBars((prev) => prev.filter((idx) => idx !== anim.index));
+      }
+
+      await sleep(speedRef.current);
     }
+
+    setActiveBars([]);
+    setIsSorting(false);
   };
 
   const handleReset = () => {
@@ -103,14 +115,27 @@ export default function BubbleSort() {
 
   return (
     <div className="sort-page">
-
       <div className="sort-controls">
         <button onClick={handleReset} disabled={isSorting}>
           Generate New Array
         </button>
+
         <button onClick={handleSort} disabled={isSorting}>
           Start BubbleSort
         </button>
+
+        <div className="speed-control">
+          <label htmlFor="speedRange">Speed</label>
+          <input
+            id="speedRange"
+            type="range"
+            min={MIN_SPEED}
+            max={MAX_SPEED}
+            value={speed}
+            onChange={(e) => setSpeed(Number(e.target.value))}
+          />
+      
+        </div>
       </div>
 
       <div className="array-container">
@@ -129,7 +154,7 @@ export default function BubbleSort() {
                 className={barClass}
                 style={{ height: `${value}px` }}
               ></div>
-              <span className="bar-label">{value}</span>
+              <span className="bar-label"></span>
             </div>
           );
         })}
@@ -137,4 +162,3 @@ export default function BubbleSort() {
     </div>
   );
 }
-

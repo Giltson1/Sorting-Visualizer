@@ -1,19 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function SelectionSort() {
   const [array, setArray] = useState([]);
   const [activeBars, setActiveBars] = useState([]);
   const [sortedBars, setSortedBars] = useState([]);
   const [isSorting, setIsSorting] = useState(false);
+  const [speed, setSpeed] = useState(50);
+  const speedRef = useRef(speed);
 
   const NUMBER_OF_BARS = 25;
   const MIN_VALUE = 20;
   const MAX_VALUE = 300;
-  const ANIMATION_SPEED = 50;
+  const MIN_SPEED = 10;
+  const MAX_SPEED = 300;
 
   useEffect(() => {
     generateNewArray();
   }, []);
+
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
 
   function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -99,7 +106,7 @@ export default function SelectionSort() {
           setIsSorting(false);
           setActiveBars([]);
         }
-      }, i * ANIMATION_SPEED);
+      }, i * speedRef.current);
     }
   };
 
@@ -117,6 +124,18 @@ export default function SelectionSort() {
         <button onClick={handleSort} disabled={isSorting}>
           Start SelectionSort
         </button>
+        <div className="speed-control">
+          <label htmlFor="speedRange">Speed</label>
+          <input
+            id="speedRange"
+            type="range"
+            min={MIN_SPEED}
+            max={MAX_SPEED}
+            value={speed}
+            onChange={(e) => setSpeed(Number(e.target.value))}
+          />
+          
+        </div>
       </div>
 
       <div className="array-container">
@@ -135,7 +154,7 @@ export default function SelectionSort() {
                 className={barClass}
                 style={{ height: `${value}px` }}
               ></div>
-              <span className="bar-label">{value}</span>
+              <span className="bar-label"></span>
             </div>
           );
         })}
